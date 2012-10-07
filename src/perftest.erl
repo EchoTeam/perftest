@@ -20,7 +20,7 @@ sequential(Cycles, F) ->
 		fun () -> executeMultipleTimes(Cycles, F) end).
 
 sequentialTimings(Cycles, F) ->
-	[ begin S = now(), F(), E = now(), timer:now_diff(E, S) end || N <- lists:seq(1, Cycles) ].
+	[ begin S = now(), F(), E = now(), timer:now_diff(E, S) end || _ <- lists:seq(1, Cycles) ].
 
 parallel(Parallel, Cycles, F) ->
 	perftest("Parallel " ++ integer_to_list(Parallel), Cycles, fun () ->
