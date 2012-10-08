@@ -1,5 +1,5 @@
 {application, perftest,
- [{description, "Perfomance measurement tool"},
+ [{description, "Performance measurement tool"},
   {vsn, "1.0"},
   {modules, []},
   {start_phases, []}
