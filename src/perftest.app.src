@@ -2,6 +2,5 @@
  [{description, "Perfomance measurement tool"},
   {vsn, "1.0"},
   {modules, []},
-  {mod, {mavg,[]}},
   {start_phases, []}
  ]}.
