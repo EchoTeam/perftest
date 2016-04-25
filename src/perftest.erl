@@ -4,6 +4,12 @@
 -module(perftest).
 -export([comprehensive/2, sequential/2, sequentialTimings/2, parallel/3]).
 
+-ifdef(deprecated_now).
+-define(NOW, erlang:system_time(micro_seconds)).
+-else.
+-define(NOW, erlang:now()).
+-endif.
+
 comprehensive(Cycles, F) ->
 	sequential(round(Cycles/10), F),	% Warming up 1
 	sequential(round(Cycles/5), F),	% Warming up 2
@@ -20,7 +26,7 @@ sequential(Cycles, F) ->
 		fun () -> executeMultipleTimes(Cycles, F) end).
 
 sequentialTimings(Cycles, F) ->
-	[ begin S = now(), F(), E = now(), timer:now_diff(E, S) end || _ <- lists:seq(1, Cycles) ].
+	[ begin S = ?NOW, F(), E = ?NOW, timer:now_diff(E, S) end || _ <- lists:seq(1, Cycles) ].
 
 parallel(Parallel, Cycles, F) ->
 	perftest("Parallel " ++ integer_to_list(Parallel), Cycles, fun () ->
@@ -36,9 +42,9 @@ parallel(Parallel, Cycles, F) ->
 	end).
 
 perftest(Name, Cycles, F) ->
-	{_, StartSecs, StartMS} = now(),
+	{_, StartSecs, StartMS} = ?NOW,
 	F(),
-	{_, StopSecs, StopMS} = now(),
+	{_, StopSecs, StopMS} = ?NOW,
 	MS = (StopSecs * 1000 + StopMS / 1000)
 		- (StartSecs * 1000 + StartMS / 1000),
 	CPS = round(1000 * Cycles / MS),
